@@ -228,10 +228,15 @@ A git client for emacs
                                             (if (char-equal c ?<) t (,electric-pair-inhibit-predicate c))))))
   (delete-selection-mode 1)
 
-#+end_src
+  (setq history-length 25)
+  (savehist-mode 1) ;; saves a hostory of prompts within emacs M-p previous M-n next.
 
-#+RESULTS:
-: t
+  (save-place-mode 1) ;; remembers where the cursor was in a file when you last had it open.
+
+  (global-auto-revert-mode 1)
+  (setq global-auto-revert-non-file-buffers t)
+  
+#+end_src
 
 * LANGUAGE SUPPORT
 Any language completion will go here.
@@ -242,7 +247,7 @@ Any language completion will go here.
     :hook ((c-mode . lsp)
            (c++-mode . lsp)
            (lsp-mode . lsp-enable-which-key-integration))
-    :commands lsp
+    :commands (lsp)
     :config
     (setq lsp-keymap-prefix "C-c l")
     (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
@@ -260,15 +265,7 @@ Any language completion will go here.
 #+end_src
 ** C/C++
 #+begin_src emacs-lisp
-  (use-package ccls
-  :ensure t
-  :config
-  :hook ((c-mode c++-mode objc-mode cuda-mode) .
-         (lambda () (require 'ccls) (lsp)))
-  (setq ccls-executable "/usr/local/bin/ccls")
-  (setq ccls-initialization-options
-	'(:index (:comments 2) :completion (:detailedLabel t))))
-
+  ()
 #+end_src
 
 * NEOTREE
@@ -326,19 +323,19 @@ Org-tempo is built into org mode it allows for insertions using <'letter' follow
 ** HIGHLIGHT TODO
 Adds highlights to TODO and related words.
 #+begin_src emacs-lisp
-                (use-package hl-todo
-                  :ensure t
-                  :hook ((org-mode . hl-todo-mode)
-                        (prog-mode . hl-todo-mode))
-                  :config
-                  (setq hl-todo-highlight-punctuation ":"
-                        hl-todo-keyword-faces
-                        `(("TODO"       warning bold)
-                          ("FIXME"      error bold)
-                          ("HACK"       font-lock-constant-face bold)
-                          ("REVIEW"     font-lock-keyword-face bold)
-                          ("NOTE"       success bold)
-                          ("DEPRECATED" font-lock-doc-face bold))))
+  (use-package hl-todo
+    :ensure t
+    :hook ((org-mode . hl-todo-mode)
+          (prog-mode . hl-todo-mode))
+    :config
+    (setq hl-todo-highlight-punctuation ":"
+          hl-todo-keyword-faces
+          `(("TODO"       warning bold)
+            ("FIXME"      error bold)
+            ("HACK"       font-lock-constant-face bold)
+            ("REVIEW"     font-lock-keyword-face bold)
+            ("NOTE"       success bold)
+            ("DEPRECATED" font-lock-doc-face bold))))
 
 #+end_src
 
@@ -439,12 +436,12 @@ vterm-toggle toggles between the vterm buffer and whatever buffer you are editin
 #+end_src
 
 * WHICH-KEY
-#+begin_src emacs-lisp
-  (use-package which-key
-    :ensure t)
-  (which-key-mode)
+  #+begin_src emacs-lisp
+    (use-package which-key
+      :ensure t)
+    (which-key-mode)
 
-#+end_src
+  #+end_src
 
 * LAST THINGS TO DO
 ** MAXIMIZE EMACS
